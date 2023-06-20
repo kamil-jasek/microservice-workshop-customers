@@ -1,0 +1,19 @@
+version: '3.1'
+
+services:
+  customers:
+    image: localhost:5000/customers
+    build: .
+    ports:
+      - "8094:8094"
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      SPRING_DATA_MONGODB_HOST: mongo
+#      SENTRY_DSN: https://c0e94b9fab154b2dab1cb4dbacf53370@o4505347633774592.ingest.sentry.io/4505350933053440
+
+  mongo:
+    image: mongo
+    volumes:
+      - ./mongo/init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    ports:
+      - "27017:27017"

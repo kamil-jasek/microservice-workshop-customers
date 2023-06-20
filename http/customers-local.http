@@ -1,0 +1,2 @@
+GET http://localhost:49530/api/customers/a13dfdb8-6e30-4d31-99e4-62c3a308e310
+version:1.0.0
