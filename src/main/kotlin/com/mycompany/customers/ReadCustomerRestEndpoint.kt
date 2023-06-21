@@ -23,8 +23,7 @@ class ReadCustomerRestEndpoint(private val mongo: MongoTemplate) {
     @Document(collection = "customers")
     data class Customer(@Id val id: String, val deliveryAddress: DeliveryAddress)
 
-    data class DeliveryAddress(val name: String, val address: String) {
-    }
+    data class DeliveryAddress(val name: String, val address: String)
 
     @GetMapping("/{id}", produces = [APPLICATION_JSON_V1], headers = ["version=1.0.0"])
     fun getCustomer(@PathVariable id: UUID): ResponseEntity<Customer> {
