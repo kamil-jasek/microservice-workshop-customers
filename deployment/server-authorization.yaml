@@ -1,0 +1,18 @@
+apiVersion: policy.linkerd.io/v1beta1
+kind: ServerAuthorization
+metadata:
+  namespace: microservices-workshop
+  name: customers-http
+  labels:
+    app.kubernetes.io/part-of: microservices-workshop
+    app.kubernetes.io/name: customers
+    app.kubernetes.io/version: v11
+spec:
+  server:
+    name: customers-http
+  # The customers service only allows requests from the orders and order-process-manager.
+  client:
+    meshTLS:
+      serviceAccounts:
+        - name: orders
+        - name: order-process-manager

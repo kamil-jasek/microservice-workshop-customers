@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customers
+  labels:
+    app: customers
+  namespace: microservices-workshop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customers
+  template:
+    metadata:
+      labels:
+        app: customers
+      annotations:
+        linkerd.io/inject: enabled
+    spec:
+      containers:
+        - name: customers
+          imagePullPolicy: Always
+          image: localhost:5000/customers:{{version}}
+          ports:
+            - containerPort: 8080
+            - containerPort: 8081
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod
+            - name: SPRING_DATA_MONGODB_HOST
+              value: mongodb
+            - name: SENTRY_DSN
+              value: https://c0e94b9fab154b2dab1cb4dbacf53370@o4505347633774592.ingest.sentry.io/4505350933053440
+          livenessProbe:
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            failureThreshold: 6
+            httpGet:
+              port: 8081
+              path: /actuator/health
+          readinessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: 5
+            failureThreshold: 8
+            httpGet:
+              port: 8081
+              path: /actuator/health
+      serviceAccountName: customers
